@@ -207,8 +207,21 @@ tests/                        # pytest, no tenant required
 
 | Argument | Type | Notes |
 | --- | --- | --- |
-| `query` | str | A plain name (`Tyler Mairose`) is quoted into a phrase match. Elasticsearch query-string syntax is passed through untouched. |
-| `limit` | int | 1–50, default 10. |
+| `query` | str | A plain name (`Tyler Mairose`) is quoted into a phrase match. Elasticsearch query-string syntax is passed through untouched. `*` matches everyone. |
+| `limit` | int | 1–250, default 10. |
+| `offset` | int | Skip this many matches, for paging. Default 0. |
+| `sort` | list[str] | Fields to sort by, `-` prefix for descending. Defaults to `["-accessCount", "id"]`. |
+| `attributes` | list[str] | Restrict returned fields, e.g. `["id", "displayName", "email"]`. Replaces the default projection. |
+| `include_nested` | bool | Include each identity's `access` / `accounts` / `apps` arrays. Default false. |
+| `count` | bool | Also return `total_count`, matches ignoring `limit`/`offset`. Costs latency. |
+
+By default each hit is flattened by `summarize_identity()`. Passing `attributes`
+or `include_nested` means the caller has asked for a shape the summarizer would
+discard, so the raw documents are returned instead (minus the `_type` / `_index`
+search plumbing).
+
+Note that the SDK's `Search` model defaults `includeNested` to **true** — the
+tool sets it explicitly, so nested objects only appear when asked for.
 
 Full query syntax: <https://developer.sailpoint.com/docs/api/v3/search-post>
 
