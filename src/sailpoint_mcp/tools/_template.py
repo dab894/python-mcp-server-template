@@ -30,7 +30,7 @@ log = logging.getLogger(__name__)
 def register(mcp: MCPServer) -> None:
     """Required. The auto-loader calls this at startup."""
 
-    @mcp.tool(name="my-tool")
+    @mcp.tool(name="my_tool")
     def my_tool(some_argument: str, limit: int = 10) -> dict[str, Any]:
         """One-line summary of what this does -- the model reads this to decide
         whether to call the tool, so describe *when* it applies.

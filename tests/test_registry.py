@@ -20,5 +20,5 @@ def test_search_identities_is_exposed_with_a_description():
     tools.register_all(mcp)
 
     listed = {tool.name: tool for tool in asyncio.run(mcp.list_tools())}
-    assert "search-identities" in listed
-    assert listed["search-identities"].description
+    assert "search_identities" in listed
+    assert listed["search_identities"].description

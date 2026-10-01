@@ -206,7 +206,7 @@ def total_count(headers: Any) -> int | None:
 
 
 def register(mcp: MCPServer) -> None:
-    @mcp.tool(name="search-identities")
+    @mcp.tool(name="search_identities")
     def search_identities(
         query: str,
         limit: int = 10,
@@ -275,7 +275,7 @@ def register(mcp: MCPServer) -> None:
         )
 
         log.info(
-            "search-identities: %s (limit=%d offset=%d nested=%s count=%s)",
+            "search_identities: %s (limit=%d offset=%d nested=%s count=%s)",
             query_string,
             limit,
             offset,
@@ -301,7 +301,7 @@ def register(mcp: MCPServer) -> None:
                 )
                 matched = None
         except Exception as exc:  # surfaced to the model as tool output, not a crash
-            log.exception("search-identities failed")
+            log.exception("search_identities failed")
             return {
                 "query": query_string,
                 "error": describe_api_error(exc),

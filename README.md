@@ -7,12 +7,12 @@ your SailPoint Identity Security Cloud tenant, via the
 Authentication, token refresh, error handling, and tool registration are already
 done. Your job for the Hackathon is to write tools.
 
-Ships with one working tool, `search-identities`, as a reference implementation.
+Ships with one working tool, `search_identities`, as a reference implementation.
 
 ```
 You:  Tell me more about the identity Tyler Mairose.
 
-      → search-identities(query="Tyler Mairose")
+      → search_identities(query="Tyler Mairose")
 
 Claude: Tyler Mairose is a Developer Tools Lead in Developer Relations,
         reporting to Ada Lovelace. Active lifecycle state, accounts on
@@ -38,6 +38,7 @@ source .venv/bin/activate
 pip install -e ".[dev]"
 
 cp .env.example .env   # then fill in your three values
+chmod 600 .env
 ```
 
 <details>
@@ -59,6 +60,11 @@ SAIL_CLIENT_SECRET=...
 
 These are the variable names the SailPoint SDK reads natively, so the same `.env`
 works for any other SDK script you write.
+
+The server loads `.env` from its own project folder, so it works no matter which
+directory the MCP client launches it from. Keep the file private: it is
+gitignored, and `chmod 600 .env` makes it readable only by you. Variables set in
+your shell or in an MCP client's `env` block take precedence over `.env`.
 
 ### 3. Verify credentials before touching an MCP client
 
@@ -86,19 +92,14 @@ claude mcp add sailpoint -- /full/path/to/python-mcp-server/.venv/bin/python -m 
   "mcpServers": {
     "sailpoint": {
       "command": "/full/path/to/python-mcp-server/.venv/bin/python",
-      "args": ["-m", "sailpoint_mcp"],
-      "env": {
-        "SAIL_BASE_URL": "https://your-tenant.api.identitynow.com",
-        "SAIL_CLIENT_ID": "...",
-        "SAIL_CLIENT_SECRET": "..."
-      }
+      "args": ["-m", "sailpoint_mcp"]
     }
   }
 }
 ```
 
-Use absolute paths — the client does not run from your project directory. Env
-vars set in the client config take precedence over `.env`; either approach works.
+Use absolute paths — the client does not run from your project directory. No
+`env` block is needed; the server reads your `.env`.
 
 Restart the client, then ask: *"Tell me more about the identity `someone at your
 company`."*
@@ -130,7 +131,7 @@ from ..client import call_sailpoint, describe_api_error
 
 
 def register(mcp: MCPServer) -> None:
-    @mcp.tool(name="list-sources")
+    @mcp.tool(name="list_sources")
     def list_sources(limit: int = 25) -> dict:
         """List the identity sources configured in the tenant.
 
@@ -203,7 +204,7 @@ scripts/check_auth.py         # credential + connectivity smoke test
 tests/                        # pytest, no tenant required
 ```
 
-## `search-identities`
+## `search_identities`
 
 | Argument | Type | Notes |
 | --- | --- | --- |
