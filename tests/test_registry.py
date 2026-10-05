@@ -10,6 +10,7 @@ def test_register_all_registers_search_identities():
     registered = tools.register_all(mcp)
 
     assert "search_identities" in registered
+    assert "get_access_request_approvals" in registered
     assert "_template" not in registered
 
 
